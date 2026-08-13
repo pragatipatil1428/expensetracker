@@ -5,12 +5,13 @@
   "type": "module",
   "description": "Spendly — a simple, professional personal expense tracker (React + Vite + Express + MongoDB)",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run dev:all",
+    "dev:client": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "dev:server": "npm run dev --prefix server",
     "start:server": "npm start --prefix server",
-    "dev:all": "concurrently -n server,client -c yellow,cyan \"npm run dev:server\" \"npm run dev\"",
+    "dev:all": "concurrently -n server,client -c yellow,cyan \"npm run dev:server\" \"npm run dev:client\"",
     "seed": "npm run seed --prefix server"
   },
   "dependencies": {
