@@ -24,8 +24,8 @@ ChartJS.register(
 );
 
 export const CATEGORY_COLORS = [
-  '#6366f1',
-  '#8b5cf6',
+  '#f97316',
+  '#fb923c',
   '#06b6d4',
   '#10b981',
   '#f59e0b',

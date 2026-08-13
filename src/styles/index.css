@@ -10,9 +10,9 @@
   --border: #e4e6f0;
   --text: #161a2b;
   --text-muted: #6b7280;
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-soft: #eef2ff;
+  --primary: #ea580c;
+  --primary-hover: #c2410c;
+  --primary-soft: #fff7ed;
   --success: #059669;
   --success-soft: #ecfdf5;
   --danger: #dc2626;
@@ -41,9 +41,9 @@
   --border: #272c44;
   --text: #e9ebf6;
   --text-muted: #9aa1b8;
-  --primary: #6366f1;
-  --primary-hover: #818cf8;
-  --primary-soft: rgba(99, 102, 241, 0.16);
+  --primary: #f97316;
+  --primary-hover: #fb923c;
+  --primary-soft: rgba(249, 115, 22, 0.16);
   --success: #34d399;
   --success-soft: rgba(16, 185, 129, 0.14);
   --danger: #f87171;
@@ -1281,7 +1281,7 @@ a:hover {
   width: 32px;
   height: 32px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #f97316, #fb923c);
   color: #fff;
   box-shadow: var(--shadow-sm);
 }
@@ -1429,7 +1429,7 @@ a:hover {
 }
 
 .auth-brand {
-  background: linear-gradient(150deg, #312e81 0%, #4f46e5 55%, #7c3aed 100%);
+  background: linear-gradient(150deg, #7c2d12 0%, #ea580c 55%, #f97316 100%);
   color: #fff;
   display: flex;
   align-items: center;
@@ -1571,7 +1571,7 @@ a:hover {
 .demo-box {
   margin-top: 24px;
   background: var(--primary-soft);
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  border: 1px solid rgba(249, 115, 22, 0.3);
   border-radius: var(--radius);
   padding: 14px 16px;
   display: flex;
