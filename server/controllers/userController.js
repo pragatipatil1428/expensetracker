@@ -13,6 +13,10 @@ export const updateProfile = catchAsync(async (req, res) => {
     throw new AppError('Provide a name or email to update', 400);
   }
 
+  if (req.user.isDemo && email && email !== req.user.email) {
+    throw new AppError('The demo account email cannot be changed', 403);
+  }
+
   if (email && email !== req.user.email) {
     const existing = await User.findOne({ email });
     if (existing) throw new AppError('This email is already in use', 409);
@@ -26,6 +30,10 @@ export const updateProfile = catchAsync(async (req, res) => {
 });
 
 export const changePassword = catchAsync(async (req, res) => {
+  if (req.user.isDemo) {
+    throw new AppError('The demo account password cannot be changed', 403);
+  }
+
   const { currentPassword, newPassword } = req.body;
   if (!currentPassword || !newPassword) {
     throw new AppError('Both current and new password are required', 400);
@@ -46,6 +54,10 @@ export const changePassword = catchAsync(async (req, res) => {
 });
 
 export const deleteAccount = catchAsync(async (req, res) => {
+  if (req.user.isDemo) {
+    throw new AppError('The demo account cannot be deleted', 403);
+  }
+
   await Transaction.deleteMany({ userId: req.user._id });
   await User.findByIdAndDelete(req.user._id);
   res.json({ message: 'Account deleted' });

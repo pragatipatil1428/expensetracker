@@ -134,7 +134,7 @@ async function seed() {
     console.log('Removed previous demo data');
   }
 
-  const user = await User.create(DEMO_USER);
+  const user = await User.create({ ...DEMO_USER, isDemo: true });
   const rand = mulberry32(20260813);
   const transactions = generateTransactions(rand);
 

@@ -17,6 +17,7 @@ export default function Settings() {
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isDemo = user?.isDemo;
 
   // Profile
   const [profile, setProfile] = useState({ name: user?.name || '', email: user?.email || '' });
@@ -130,6 +131,12 @@ export default function Settings() {
         <section className="card settings-card">
           <h3 className="settings-card__title">Profile</h3>
           <p className="settings-card__description">Update your name and email address.</p>
+          {isDemo && (
+            <p className="settings-card__description">
+              This is a shared demo account — changing the email or password and deleting the
+              account are disabled.
+            </p>
+          )}
           <form className="settings-form" onSubmit={handleProfileSubmit} noValidate>
             <Input
               label="Name"
@@ -145,6 +152,7 @@ export default function Settings() {
               value={profile.email}
               onChange={setProfileField('email')}
               error={profileErrors.email}
+              disabled={isDemo}
             />
             <div className="settings-form__actions">
               <Button type="submit" loading={savingProfile}>
@@ -154,44 +162,46 @@ export default function Settings() {
           </form>
         </section>
 
-        <section className="card settings-card">
-          <h3 className="settings-card__title">Password</h3>
-          <p className="settings-card__description">Choose a strong password you don&apos;t use elsewhere.</p>
-          <form className="settings-form" onSubmit={handlePasswordSubmit} noValidate>
-            <Input
-              label="Current Password"
-              name="current-password"
-              type="password"
-              value={pass.currentPassword}
-              onChange={setPassField('currentPassword')}
-              error={passErrors.currentPassword}
-              autoComplete="current-password"
-            />
-            <Input
-              label="New Password"
-              name="new-password"
-              type="password"
-              value={pass.newPassword}
-              onChange={setPassField('newPassword')}
-              error={passErrors.newPassword}
-              autoComplete="new-password"
-            />
-            <Input
-              label="Confirm New Password"
-              name="confirm-password"
-              type="password"
-              value={pass.confirm}
-              onChange={setPassField('confirm')}
-              error={passErrors.confirm}
-              autoComplete="new-password"
-            />
-            <div className="settings-form__actions">
-              <Button type="submit" loading={savingPass}>
-                Change Password
-              </Button>
-            </div>
-          </form>
-        </section>
+        {!isDemo && (
+          <section className="card settings-card">
+            <h3 className="settings-card__title">Password</h3>
+            <p className="settings-card__description">Choose a strong password you don&apos;t use elsewhere.</p>
+            <form className="settings-form" onSubmit={handlePasswordSubmit} noValidate>
+              <Input
+                label="Current Password"
+                name="current-password"
+                type="password"
+                value={pass.currentPassword}
+                onChange={setPassField('currentPassword')}
+                error={passErrors.currentPassword}
+                autoComplete="current-password"
+              />
+              <Input
+                label="New Password"
+                name="new-password"
+                type="password"
+                value={pass.newPassword}
+                onChange={setPassField('newPassword')}
+                error={passErrors.newPassword}
+                autoComplete="new-password"
+              />
+              <Input
+                label="Confirm New Password"
+                name="confirm-password"
+                type="password"
+                value={pass.confirm}
+                onChange={setPassField('confirm')}
+                error={passErrors.confirm}
+                autoComplete="new-password"
+              />
+              <div className="settings-form__actions">
+                <Button type="submit" loading={savingPass}>
+                  Change Password
+                </Button>
+              </div>
+            </form>
+          </section>
+        )}
 
         <section className="card settings-card">
           <h3 className="settings-card__title">Appearance</h3>
@@ -230,17 +240,19 @@ export default function Settings() {
           </div>
         </section>
 
-        <section className="card settings-card settings-card--danger">
-          <h3 className="settings-card__title">Danger Zone</h3>
-          <p className="settings-card__description">
-            Permanently delete your account and all of your transactions. This cannot be undone.
-          </p>
-          <div className="settings-form__actions">
-            <Button variant="danger-outline" icon="trash" onClick={() => setDeleteOpen(true)}>
-              Delete Account
-            </Button>
-          </div>
-        </section>
+        {!isDemo && (
+          <section className="card settings-card settings-card--danger">
+            <h3 className="settings-card__title">Danger Zone</h3>
+            <p className="settings-card__description">
+              Permanently delete your account and all of your transactions. This cannot be undone.
+            </p>
+            <div className="settings-form__actions">
+              <Button variant="danger-outline" icon="trash" onClick={() => setDeleteOpen(true)}>
+                Delete Account
+              </Button>
+            </div>
+          </section>
+        )}
       </div>
 
       <ConfirmDialog
