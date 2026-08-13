@@ -13,7 +13,12 @@ export async function connectDB(uri) {
   }
 
   if (!connectionPromise) {
-    connectionPromise = mongoose.connect(uri);
+    connectionPromise = mongoose.connect(uri, {
+      // Fail fast instead of hanging the whole function budget when the
+      // database is unreachable (e.g. Atlas network access blocks Vercel).
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 10000,
+    });
   }
 
   try {
