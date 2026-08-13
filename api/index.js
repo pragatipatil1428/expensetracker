@@ -21,6 +21,14 @@ export default async function handler(req, res) {
     return;
   }
 
+  if (!process.env.JWT_SECRET) {
+    res.status(500).json({
+      message:
+        'JWT_SECRET is not set. Add it to the Vercel project environment variables.',
+    });
+    return;
+  }
+
   try {
     await connectDB(process.env.MONGODB_URI);
   } catch (err) {
