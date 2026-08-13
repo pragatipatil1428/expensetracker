@@ -1,193 +1,248 @@
-# FinTrack — Personal Finance & Expense Tracker
+# Spendly — Personal Expense Tracker
 
-A production-ready personal finance web application. Track income and expenses, set
-budgets, manage recurring bills, and understand your spending with a modern, premium
-dashboard — built with Next.js 16, React 19, TypeScript, Prisma 7 and PostgreSQL.
+A simple, professional personal expense tracker built to manage daily income and expenses and
+understand spending through clean, honest analytics. Designed as a portfolio project that
+demonstrates a **deliberately simple JavaScript stack** — no frameworks beyond the essentials,
+no TypeScript, no enterprise architecture.
 
-![Next.js](https://img.shields.io/badge/Next.js-16-black) ![React](https://img.shields.io/badge/React-19-61dafb) ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6) ![Prisma](https://img.shields.io/badge/Prisma-7-2d3748) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)
+![Stack](https://img.shields.io/badge/React-19-61dafb) ![Vite](https://img.shields.io/badge/Vite-6-646cff) ![Express](https://img.shields.io/badge/Express-4-000) ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green)
 
 ---
 
-## Features
+## ✨ Features
 
-### Core
-- **Dashboard** — balance, income, expenses, savings & savings rate with period-over-period
-  trend comparisons; income-vs-expense chart, category donut, savings trend and budget
-  utilization; 7D / 30D / 3M / 6M / 1Y periods.
-- **Transactions** — full CRUD with search (description, category, tags), filters
-  (type, category, payment method, date range, amount range), sorting and pagination.
-  Rich detail view, CSV export.
-- **Categories** — custom categories with icons and colours, default sets for income and
-  expense, usage-aware deletion (reassign or block).
-- **Budgets** — monthly and yearly budgets, per-category or overall; progress bars,
-  "approaching" warning at 80%, "exceeded" alert at 100%, budget-vs-actual chart.
-- **Recurring transactions** — salary, rent, subscriptions, EMIs with daily/weekly/monthly/
-  yearly frequencies; upcoming list, pause/resume, one-click "record" that creates the
-  transaction and advances the schedule.
-- **Analytics** — monthly income/expense breakdown, category distribution, income sources,
-  daily spending trend, top categories, with preset and custom date ranges.
-- **Reports** — monthly, yearly, category, income and expense reports with summaries,
-  largest transactions and **CSV + PDF export** (client-side generation).
-- **Notifications** — budget alerts, upcoming payment reminders and a monthly financial
-  summary, with read/unread management.
-- **Global search** — ⌘K / Ctrl+K command palette across transactions, categories,
-  budgets and recurring schedules.
+- **Authentication** — register, login, JWT-based sessions with bcrypt password hashing
+- **Dashboard** — total balance, income, expenses, this month's spend, greeting by time of day
+- **Transactions** — full CRUD with search, filters (type, category, date range) and sorting
+- **Analytics** — expense-by-category, income vs expenses, monthly trends with date-range filters
+- **Monthly summary** — current month income, expenses, savings, top category, largest expense
+- **Charts** — Chart.js doughnut, bar and line charts that update automatically
+- **CSV export** — one-click export of the current filtered view
+- **Settings** — update profile, change password, dark/light mode, logout, delete account
+- **Dark mode** — persisted locally, system-aware default
+- **Fully responsive** — mobile, tablet and desktop; tables collapse into cards on small screens
+- **Polish** — toasts, loading skeletons, empty states, error states, confirmation dialogs
 
-### Platform
-- Complete **authentication** (Auth.js v5): register, login, logout, forgot/reset password,
-  profile editing, change password, account deletion. Bcrypt-hashed passwords, JWT
-  sessions, protected routes via Next.js `proxy`.
-- **Dark / light / system** themes, INR / USD / EUR / GBP currency support.
-- Fully **responsive**: desktop sidebar, mobile bottom navigation, touch-friendly controls.
-- **Accessibility**: semantic HTML, labels, focus states, keyboard navigation, ARIA
-  dialogs, reduced-motion support.
-- **Loading, empty, error** states everywhere, skeleton loaders, toast feedback and
-  confirmation dialogs.
-- Strict ownership checks: every server action validates the session and scopes all
-  queries to the authenticated user.
+## 🖼️ Screenshots
 
-## Tech stack
+> Add screenshots of the dashboard (light + dark), transactions and analytics pages here.
 
-| Layer      | Technology |
-| ---------- | ---------- |
-| Framework  | Next.js 16 (App Router, Turbopack) |
-| UI         | React 19, TypeScript, Tailwind CSS v4, Framer Motion |
-| Forms      | React Hook Form + Zod |
-| Data       | TanStack Query, Zustand |
-| Charts     | Recharts 3 |
-| Backend    | Next.js Server Actions |
-| Database   | PostgreSQL 16, Prisma 7 (driver adapters) |
-| Auth       | Auth.js / NextAuth v5 (JWT, credentials) |
-| Export     | Client-side CSV, jsPDF + autotable |
+## 🧱 Technology Stack
 
-## Screenshots
+**Frontend**
 
-> Add screenshots of the dashboard, analytics and reports here once deployed.
+| Layer      | Choice                              |
+| ---------- | ----------------------------------- |
+| Framework  | React 19                            |
+| Build tool | Vite 6                              |
+| Language   | JavaScript (ESM)                    |
+| Routing    | React Router 7                      |
+| Charts     | Chart.js 4 + react-chartjs-2        |
+| HTTP       | Axios                               |
+| Styling    | Plain CSS with CSS custom properties |
 
-## Architecture
+**Backend**
+
+| Layer      | Choice                       |
+| ---------- | ---------------------------- |
+| Runtime    | Node.js 20+                  |
+| Framework  | Express 4                    |
+| Database   | MongoDB (Mongoose 8)         |
+| Auth       | JWT + bcryptjs               |
+| Validation | Lightweight middleware       |
+
+**Deliberately excluded:** TypeScript, Next.js, Prisma, Redux/Zustand, Dockerized app servers,
+and any micro-service complexity.
+
+## 🏗️ Architecture
 
 ```
-src/
-  app/
-    (auth)/            # login, register, forgot/reset password
-    (dashboard)/       # dashboard, transactions, budgets, categories,
-                       # recurring, analytics, reports, settings, profile
-    api/auth/          # Auth.js route handlers
-  actions/             # server actions (auth, transactions, categories, budgets, …)
-  components/
-    ui/                # design-system primitives (button, dialog, select, …)
-    layout/            # sidebar, header, mobile nav, command palette, notifications
-    dashboard/         # dashboard widgets and charts
-    transactions/      # transaction explorer, forms, details
-    budgets/ categories/ recurring/ analytics/ reports/
-  lib/                 # prisma, auth, queries, analytics, notifications, formatting
-  schemas/             # Zod validation schemas
-  stores/              # Zustand global UI state
-  generated/prisma/    # generated Prisma client (git-ignored)
-prisma/
-  schema.prisma        # data model
-  seed.ts              # demo data
+├── index.html                 # Vite entry
+├── vite.config.js             # Dev proxy: /api → :5000
+├── src/                       # React frontend
+│   ├── components/
+│   │   ├── layout/            # AppLayout, Sidebar, Topbar
+│   │   ├── ui/                # Button, Input, Select, Modal, Toast, …
+│   │   ├── features/          # StatCard, ChartCard, TransactionTable, TransactionForm
+│   │   └── charts/            # Doughnut, Bar, Line (theme-aware)
+│   ├── context/               # Auth, Theme, Toast (React Context only)
+│   ├── pages/                 # Login, Register, Dashboard, Transactions, Analytics, Settings
+│   ├── services/              # Centralized Axios client + API modules
+│   ├── hooks/                 # useFetch, useDocumentTitle
+│   ├── routes/                # ProtectedRoute, GuestRoute
+│   ├── utils/                 # format, csv, charts, constants
+│   └── styles/                # Design system (CSS variables, dark mode)
+└── server/                    # Express API
+    ├── config/                # MongoDB connection
+    ├── controllers/           # auth, transactions, analytics, users
+    ├── models/                # User, Transaction (Mongoose)
+    ├── middleware/            # JWT protect, validation, error handler
+    ├── routes/                # REST route definitions
+    ├── services/              # Analytics aggregations (Mongo pipelines)
+    ├── utils/                 # AppError, catchAsync, token helpers
+    ├── seed.js                # Realistic demo data
+    └── server.js              # Entry point
 ```
 
-**Data flow** — pages are Server Components for the shell; interactive pages fetch data
-through server actions surfaced by TanStack Query. Mutations run through Zod-validated
-server actions that verify the session and user ownership, then invalidate the relevant
-query caches and refresh server components. Money is stored as `Decimal` and serialised
-to numbers at the boundary.
+**Key decisions**
 
-## Database design
+- State management is plain **React Context + local state** — no Redux or Zustand.
+- The frontend talks to one **centralized Axios client** that attaches the JWT, handles 401s
+  (clears the session and redirects to login), and surfaces friendly error messages.
+- All data routes are protected by a JWT middleware and every query is **scoped to the
+  authenticated user** — a user can never read or modify another user's transactions.
+- Analytics are computed server-side with **MongoDB aggregation pipelines** — no hardcoded numbers.
 
-- `User`, `Account`, `Session`, `PasswordResetToken`
-- `Category`, `Transaction`, `Tag` (many-to-many), `Budget`, `RecurringTransaction`,
-  `Notification`
-- `Decimal(12,2)` for all money fields (never floats)
-- Indexes on frequently filtered columns: `(userId, date)`, `(userId, type)`,
-  `(userId, read)`, `(userId, isActive)`, unique constraints for email and
-  per-user category names.
+## 🚀 Installation
 
-## Getting started
-
-### Prerequisites
-
-- Node.js 20+ and npm
-- Docker (for PostgreSQL) or a hosted PostgreSQL instance
-
-### 1. Configure the environment
+Prerequisites: **Node.js 20+** and **Docker** (for the local MongoDB).
 
 ```bash
-cp .env.example .env
-# Generate a secret:
-node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
-```
-
-Set `DATABASE_URL`, `AUTH_SECRET` and `AUTH_URL` in `.env`.
-
-### 2. Start the database
-
-```bash
-docker compose up -d          # PostgreSQL on localhost:5434
-```
-
-### 3. Install, generate and seed
-
-```bash
+# 1. Clone & install dependencies
 npm install
-npx prisma generate
-npx prisma db push
-npx prisma db seed
+cd server && npm install && cd ..
+
+# 2. Configure environment variables (see below)
+cp .env.example .env                    # frontend (optional in dev)
+cp server/.env.example server/.env      # backend (required)
+
+# 3. Start MongoDB
+docker compose up -d
+
+# 4. (Optional) load realistic demo data
+npm run seed
+
+# 5. Run everything
+npm run dev:all
 ```
 
-Or run the one-liner: `npm run db:setup`.
+- Frontend → http://localhost:5173
+- Backend API → http://localhost:5000
 
-### 4. Run the app
+## 🔐 Environment Variables
+
+**Backend** (`server/.env`)
+
+| Variable        | Description                                            | Example                                      |
+| --------------- | ------------------------------------------------------ | -------------------------------------------- |
+| `PORT`          | API port                                               | `5000`                                       |
+| `MONGODB_URI`   | MongoDB connection string                              | `mongodb://127.0.0.1:27017/spendly`          |
+| `JWT_SECRET`    | Secret used to sign JWTs — use a long random string    | `openssl rand -hex 32`                       |
+| `JWT_EXPIRES_IN`| Token lifetime                                         | `7d`                                         |
+| `CLIENT_URL`    | Allowed CORS origin (the frontend)                     | `http://localhost:5173`                      |
+
+**Frontend** (`.env`)
+
+| Variable        | Description                                                              |
+| --------------- | ------------------------------------------------------------------------ |
+| `VITE_API_URL`  | Backend base URL. Leave empty in dev (Vite proxies `/api` → `:5000`).    |
+
+> ⚠️ Never commit real secrets. `server/.env` and `.env` are gitignored.
+
+## 🧪 Running Frontend / Backend
 
 ```bash
-npm run dev                   # http://localhost:3000
+npm run dev          # frontend only (Vite, :5173)
+npm run dev:server   # backend only (:5000)
+npm run dev:all      # both together
+npm run build        # production build of the frontend (dist/)
+npm run seed         # reset + load demo data
 ```
 
-### Production build
+## 🗄️ MongoDB Setup
+
+The repo includes a `docker-compose.yml` for a local MongoDB 7 instance:
 
 ```bash
-npm run build
-npm start
+docker compose up -d        # start
+docker compose down         # stop (data persists in the volume)
 ```
 
-## Demo account
+For production, use a managed MongoDB (e.g. MongoDB Atlas) and set `MONGODB_URI` to the
+`srv://` connection string. The only schema changes needed are handled by Mongoose models.
 
-| Role  | Email            | Password   | Data |
-| ----- | ---------------- | ---------- | ---- |
-| Demo  | demo@fintrack.app | Demo@1234  | 12 months of realistic Indian finances |
-| Test  | test@fintrack.app | Test@1234  | 6 months of lighter data |
+## 📚 API Documentation
 
-## Environment variables
+Base URL: `http://localhost:5000/api` · Auth: `Authorization: Bearer <token>`
 
-| Variable        | Required | Description |
-| --------------- | -------- | ----------- |
-| `DATABASE_URL`  | ✅       | PostgreSQL connection string |
-| `AUTH_SECRET`   | ✅       | Auth.js signing secret |
-| `AUTH_URL`      | ✅       | App base URL (used for callbacks and reset links) |
-| `RESEND_API_KEY`| ⭕       | Optional — enables password-reset emails. Without it, reset links are shown in the UI (development mode) |
+### Auth
 
-## Deployment
+| Method | Endpoint            | Description                | Auth |
+| ------ | ------------------- | -------------------------- | ---- |
+| POST   | `/auth/register`    | Create an account          | —    |
+| POST   | `/auth/login`       | Login, returns JWT         | —    |
+| GET    | `/auth/me`          | Current user               | ✅   |
 
-- Build with `next build` and deploy to any Node.js host (Vercel, Railway, Render,
-  a VPS, etc.).
-- Provision a managed PostgreSQL instance and point `DATABASE_URL` at it.
-- Run `prisma db push` (or migrations) against the production database, set
-  `AUTH_SECRET` and `AUTH_URL`, and configure `RESEND_API_KEY` for transactional email.
+### Transactions
 
-## Future improvements
+| Method | Endpoint             | Description                              | Auth |
+| ------ | -------------------- | ---------------------------------------- | ---- |
+| GET    | `/transactions`      | List (query: `search`, `type`, `category`, `from`, `to`, `sort`, `limit`) | ✅ |
+| POST   | `/transactions`      | Create                                   | ✅   |
+| GET    | `/transactions/:id`  | Get one                                  | ✅   |
+| PUT    | `/transactions/:id`  | Update (partial)                         | ✅   |
+| DELETE | `/transactions/:id`  | Delete                                   | ✅   |
 
-- OAuth providers (Google / GitHub) via the existing Account/Session models
-- Automatic processing of due recurring transactions (cron / queue)
-- Transaction attachments and receipt scanning
-- Multi-currency accounts with live exchange rates
-- Savings-goal tracking and net-worth timeline
-- Unit & integration tests (Vitest + Playwright) around the pure analytics and
-  validation modules
+`sort` values: `newest`, `oldest`, `amount_desc`, `amount_asc`.
+
+### Analytics
+
+| Method | Endpoint                    | Description                                                      | Auth |
+| ------ | --------------------------- | ---------------------------------------------------------------- | ---- |
+| GET    | `/analytics/summary`        | Totals, savings, changes, top category, largest expense (`range`) | ✅  |
+| GET    | `/analytics/monthly`        | Monthly income/expenses (`months=6` or `range`)                  | ✅   |
+| GET    | `/analytics/categories`     | Expense totals per category (`range`)                            | ✅   |
+
+`range` values: `thisMonth`, `lastMonth`, `last3Months`, `thisYear`, `all`.
+
+### Users
+
+| Method | Endpoint            | Description                     | Auth |
+| ------ | ------------------- | ------------------------------- | ---- |
+| GET    | `/users/profile`    | Get profile                     | ✅   |
+| PUT    | `/users/profile`    | Update name / email             | ✅   |
+| PUT    | `/users/password`   | Change password                 | ✅   |
+| DELETE | `/users/account`    | Delete account + all data       | ✅   |
+
+**Example — create a transaction**
+
+```bash
+curl -X POST http://localhost:5000/api/transactions \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"description":"Lunch","amount":450,"type":"expense","category":"Food","date":"2026-08-10","paymentMethod":"UPI"}'
+```
+
+## 👤 Demo Credentials
+
+After running `npm run seed`:
+
+```
+Email:    demo@spendly.app
+Password: demo1234
+```
+
+The seed creates ~6 months of realistic transactions (salary, rent, groceries, subscriptions,
+travel, freelance income, etc.) so every page and chart is populated immediately.
+
+## 🔒 Security Notes
+
+- Passwords are hashed with **bcrypt** (cost 10) before storage.
+- JWTs are stored in `localStorage` on the client — acceptable for this project's scope, but
+  note that `httpOnly` cookies offer stronger XSS protection for production apps.
+- All transaction/profile routes validate ownership server-side.
+- Inputs are validated with middleware and MongoDB schemas; the central error handler never
+  leaks stack traces or internal details.
+
+## 🧭 Future Improvements
+
+- Pagination and monthly-budget tracking per category
+- Recurring transaction automation
+- Multi-currency support (currency per user, configurable formatting)
+- PDF/Excel export in addition to CSV
+- `httpOnly` cookie sessions and CSRF protection
+- Unit and integration tests (Vitest + Supertest)
 
 ---
 
-Built as a full-stack portfolio project: Next.js · React · TypeScript · Prisma ·
-PostgreSQL · Auth.js · Server Actions · Recharts — demonstrating production-grade
-architecture, security, validation and UI craft.
+Built with a deliberately simple stack — React, Vite, Express, MongoDB. No magic, just clean code.

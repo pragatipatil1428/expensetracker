@@ -1,22 +1,19 @@
+# Local MongoDB for development only.
+# Production should use a managed MongoDB (MongoDB Atlas, etc.) via MONGODB_URI.
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: fintrack-postgres
+  mongodb:
+    image: mongo:7
+    container_name: spendly-mongo
     restart: unless-stopped
-    environment:
-      POSTGRES_USER: fintrack
-      POSTGRES_PASSWORD: fintrack
-      POSTGRES_DB: fintrack
-    # Host port 5434 → container 5432 (5432/5433 are used by other projects)
     ports:
-      - "5434:5432"
+      - "27017:27017"
     volumes:
-      - fintrack_pgdata:/var/lib/postgresql/data
+      - mongo_data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U fintrack -d fintrack"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
-  fintrack_pgdata:
+  mongo_data:
