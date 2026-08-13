@@ -133,8 +133,8 @@ export default function Settings() {
           <p className="settings-card__description">Update your name and email address.</p>
           {isDemo && (
             <p className="settings-card__description">
-              This is a shared demo account — changing the email or password and deleting the
-              account are disabled.
+              This is a shared demo account — changing the name, email, or password and deleting
+              the account are disabled.
             </p>
           )}
           <form className="settings-form" onSubmit={handleProfileSubmit} noValidate>
@@ -144,6 +144,7 @@ export default function Settings() {
               value={profile.name}
               onChange={setProfileField('name')}
               error={profileErrors.name}
+              disabled={isDemo}
             />
             <Input
               label="Email"
@@ -154,11 +155,13 @@ export default function Settings() {
               error={profileErrors.email}
               disabled={isDemo}
             />
-            <div className="settings-form__actions">
-              <Button type="submit" loading={savingProfile}>
-                Save Profile
-              </Button>
-            </div>
+            {!isDemo && (
+              <div className="settings-form__actions">
+                <Button type="submit" loading={savingProfile}>
+                  Save Profile
+                </Button>
+              </div>
+            )}
           </form>
         </section>
 

@@ -13,8 +13,8 @@ export const updateProfile = catchAsync(async (req, res) => {
     throw new AppError('Provide a name or email to update', 400);
   }
 
-  if (req.user.isDemo && email && email !== req.user.email) {
-    throw new AppError('The demo account email cannot be changed', 403);
+  if (req.user.isDemo) {
+    throw new AppError('The demo account profile cannot be changed', 403);
   }
 
   if (email && email !== req.user.email) {
