@@ -95,7 +95,8 @@ and any micro-service complexity.
 
 ## 🚀 Installation
 
-Prerequisites: **Node.js 20+** and **Docker** (for the local MongoDB).
+Prerequisites: **Node.js 20+** and a **MongoDB instance** — native install or MongoDB Atlas.
+See [MongoDB Setup](#-mongodb-setup).
 
 ```bash
 # 1. Clone & install dependencies
@@ -106,8 +107,9 @@ cd server && npm install && cd ..
 cp .env.example .env                    # frontend (optional in dev)
 cp server/.env.example server/.env      # backend (required)
 
-# 3. Start MongoDB
-docker compose up -d
+# 3. Start MongoDB — pick one:
+#    a) Native MongoDB: already listening on localhost:27017 → nothing to do
+#    b) MongoDB Atlas: set MONGODB_URI to your srv:// string in server/.env
 
 # 4. (Optional) load realistic demo data
 npm run seed
@@ -151,15 +153,25 @@ npm run seed         # reset + load demo data
 
 ## 🗄️ MongoDB Setup
 
-The repo includes a `docker-compose.yml` for a local MongoDB 7 instance:
+The app just needs a MongoDB reachable at `MONGODB_URI`. Pick one option:
 
-```bash
-docker compose up -d        # start
-docker compose down         # stop (data persists in the volume)
-```
+**Option A — Native MongoDB (recommended for local dev)**
 
-For production, use a managed MongoDB (e.g. MongoDB Atlas) and set `MONGODB_URI` to the
-`srv://` connection string. The only schema changes needed are handled by Mongoose models.
+1. Install MongoDB Community Server:
+   - Windows: `winget install MongoDB.Server` (or download the MSI from mongodb.com)
+   - macOS: `brew tap mongodb/brew && brew install mongodb-community`
+2. Start it: on Windows the service starts automatically; on macOS run
+   `brew services start mongodb-community`.
+3. Done — the default `mongodb://127.0.0.1:27017/spendly` already works, no env changes needed.
+
+**Option B — MongoDB Atlas (free cloud)**
+
+1. Create a free cluster at https://www.mongodb.com/atlas.
+2. Copy the `srv://` connection string into `server/.env` as `MONGODB_URI`.
+3. Add your IP to the Atlas network access list (Project → Network Access).
+
+For production, use a managed MongoDB (e.g. Atlas) and set `MONGODB_URI` to the `srv://`
+connection string. The only schema changes needed are handled by Mongoose models.
 
 ## 📚 API Documentation
 

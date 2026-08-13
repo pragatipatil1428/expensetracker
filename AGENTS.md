@@ -7,7 +7,7 @@ simple stack: plain JavaScript everywhere.
 
 - Frontend: React + Vite (JavaScript, no TypeScript) at the repo root — `src/`
 - Backend: Node.js + Express (JavaScript, ESM) in `server/`
-- Database: MongoDB via Mongoose, run locally with Docker Compose
+- Database: MongoDB via Mongoose, run locally (native install or MongoDB Atlas)
 
 ## Commands
 
