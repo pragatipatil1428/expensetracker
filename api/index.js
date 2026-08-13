@@ -25,10 +25,9 @@ export default async function handler(req, res) {
     await connectDB(process.env.MONGODB_URI);
   } catch (err) {
     // Surface the real cause (e.g. Atlas network access) instead of a 504.
-    console.error('MongoDB connection failed:', err.message);
+    console.error('MongoDB connection failed:', err);
     res.status(500).json({
-      message:
-        'Database connection failed. Check the MONGODB_URI value and Atlas network access.',
+      message: `Database connection failed: ${err.message}`,
     });
     return;
   }
