@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import Logo from '../ui/Logo.jsx';
 import ThemeToggle from '../ui/ThemeToggle.jsx';
 import Icon from '../ui/Icon.jsx';
+import ConfirmDialog from '../ui/ConfirmDialog.jsx';
 import { initials } from '../../utils/format.js';
 
 const NAV_ITEMS = [
@@ -17,8 +19,10 @@ export default function Sidebar({ open, onClose }) {
   const { user, logout } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   const handleLogout = () => {
+    setLogoutOpen(false);
     logout();
     toast('You have been logged out', 'info');
     navigate('/login', { replace: true });
@@ -66,7 +70,7 @@ export default function Sidebar({ open, onClose }) {
             <button
               type="button"
               className="icon-btn sidebar__logout"
-              onClick={handleLogout}
+              onClick={() => setLogoutOpen(true)}
               aria-label="Log out"
               title="Log out"
             >
@@ -76,6 +80,15 @@ export default function Sidebar({ open, onClose }) {
           <ThemeToggle className="sidebar__theme" />
         </div>
       </aside>
+
+      <ConfirmDialog
+        open={logoutOpen}
+        title="Log out?"
+        message="You will need to log in again to access your account."
+        confirmLabel="Log Out"
+        onConfirm={handleLogout}
+        onCancel={() => setLogoutOpen(false)}
+      />
     </>
   );
 }

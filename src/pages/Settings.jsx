@@ -29,7 +29,8 @@ export default function Settings() {
   const [passErrors, setPassErrors] = useState({});
   const [savingPass, setSavingPass] = useState(false);
 
-  // Danger zone
+  // Session & danger zone
+  const [logoutOpen, setLogoutOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -237,7 +238,7 @@ export default function Settings() {
             You are logged in as <strong>{user?.email}</strong>.
           </p>
           <div className="settings-form__actions">
-            <Button variant="secondary" icon="logout" onClick={handleLogout}>
+            <Button variant="secondary" icon="logout" onClick={() => setLogoutOpen(true)}>
               Log Out
             </Button>
           </div>
@@ -257,6 +258,15 @@ export default function Settings() {
           </section>
         )}
       </div>
+
+      <ConfirmDialog
+        open={logoutOpen}
+        title="Log out?"
+        message="You will need to log in again to access your account."
+        confirmLabel="Log Out"
+        onConfirm={handleLogout}
+        onCancel={() => setLogoutOpen(false)}
+      />
 
       <ConfirmDialog
         open={deleteOpen}
