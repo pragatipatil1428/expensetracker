@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, 'Email is required'],
-      unique: true,
       lowercase: true,
       trim: true,
       match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email'],
@@ -46,6 +45,14 @@ userSchema.pre('find', excludeSoftDeleted);
 userSchema.pre('findOne', excludeSoftDeleted);
 userSchema.pre('findOneAndUpdate', excludeSoftDeleted);
 userSchema.pre('countDocuments', excludeSoftDeleted);
+
+// Uniqueness applies only to live accounts: a soft-deleted account's email
+// can be reused when a new account is registered. Live accounts (isDeleted:
+// false) must still have unique emails, so the unique index is partial.
+userSchema.index(
+  { email: 1 },
+  { unique: true, partialFilterExpression: { isDeleted: false } }
+);
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();

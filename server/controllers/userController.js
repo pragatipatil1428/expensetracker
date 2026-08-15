@@ -18,10 +18,9 @@ export const updateProfile = catchAsync(async (req, res) => {
   }
 
   if (email && email !== req.user.email) {
-    // Include soft-deleted accounts — their email stays reserved in the DB.
-    const existing = await User.collection.findOne({
-      email: String(email).trim().toLowerCase(),
-    });
+    // Queries exclude soft-deleted accounts, so an email held only by a
+    // deleted account can be taken over.
+    const existing = await User.findOne({ email });
     if (existing) throw new AppError('This email is already in use', 409);
   }
 
