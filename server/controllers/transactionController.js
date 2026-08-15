@@ -73,10 +73,13 @@ export const updateTransaction = catchAsync(async (req, res) => {
 });
 
 export const deleteTransaction = catchAsync(async (req, res) => {
-  const transaction = await Transaction.findOneAndDelete({
-    _id: req.params.id,
-    userId: req.user._id,
-  });
+  // Soft delete: the record stays in the database but is hidden from all
+  // queries and analytics via the model's isDeleted middleware.
+  const transaction = await Transaction.findOneAndUpdate(
+    { _id: req.params.id, userId: req.user._id },
+    { isDeleted: true },
+    { new: true }
+  );
   if (!transaction) throw new AppError('Transaction not found', 404);
   res.json({ message: 'Transaction deleted' });
 });

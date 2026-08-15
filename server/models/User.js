@@ -27,9 +27,25 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
   },
   { timestamps: true }
 );
+
+// Soft delete — queries automatically exclude deleted accounts so a deleted
+// user can no longer log in or be returned by any lookup.
+function excludeSoftDeleted() {
+  this.where({ isDeleted: false });
+}
+
+userSchema.pre('find', excludeSoftDeleted);
+userSchema.pre('findOne', excludeSoftDeleted);
+userSchema.pre('findOneAndUpdate', excludeSoftDeleted);
+userSchema.pre('countDocuments', excludeSoftDeleted);
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();

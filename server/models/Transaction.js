@@ -72,11 +72,31 @@ const transactionSchema = new mongoose.Schema(
       maxlength: [500, 'Notes must be under 500 characters'],
       default: '',
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
   },
   { timestamps: true }
 );
 
 // Compound index for the most common query pattern: a user's transactions by date.
 transactionSchema.index({ userId: 1, date: -1 });
+
+// ── Soft delete ──────────────────────────────────────────────────────────
+// Every query automatically excludes soft-deleted documents, so a deleted
+// record never surfaces in lists, analytics, or updates.
+function excludeSoftDeleted() {
+  this.where({ isDeleted: false });
+}
+
+transactionSchema.pre('find', excludeSoftDeleted);
+transactionSchema.pre('findOne', excludeSoftDeleted);
+transactionSchema.pre('findOneAndUpdate', excludeSoftDeleted);
+transactionSchema.pre('countDocuments', excludeSoftDeleted);
+transactionSchema.pre('aggregate', function () {
+  this.pipeline().unshift({ $match: { isDeleted: false } });
+});
 
 export const Transaction = mongoose.model('Transaction', transactionSchema);

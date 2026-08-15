@@ -18,7 +18,10 @@ export const updateProfile = catchAsync(async (req, res) => {
   }
 
   if (email && email !== req.user.email) {
-    const existing = await User.findOne({ email });
+    // Include soft-deleted accounts — their email stays reserved in the DB.
+    const existing = await User.collection.findOne({
+      email: String(email).trim().toLowerCase(),
+    });
     if (existing) throw new AppError('This email is already in use', 409);
   }
 
@@ -58,7 +61,9 @@ export const deleteAccount = catchAsync(async (req, res) => {
     throw new AppError('The demo account cannot be deleted', 403);
   }
 
-  await Transaction.deleteMany({ userId: req.user._id });
-  await User.findByIdAndDelete(req.user._id);
+  // Soft delete: mark the account and all its transactions as deleted so
+  // nothing is physically removed, but the user can no longer log in.
+  await Transaction.updateMany({ userId: req.user._id }, { isDeleted: true });
+  await User.findByIdAndUpdate(req.user._id, { isDeleted: true });
   res.json({ message: 'Account deleted' });
 });

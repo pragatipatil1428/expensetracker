@@ -6,7 +6,11 @@ import { signToken } from '../utils/token.js';
 export const register = catchAsync(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const existing = await User.findOne({ email });
+  // Include soft-deleted accounts: their email stays reserved in the DB,
+  // so a duplicate-key error would otherwise surface as a 500 on create.
+  const existing = await User.collection.findOne({
+    email: String(email).trim().toLowerCase(),
+  });
   if (existing) {
     throw new AppError('An account with this email already exists', 409);
   }
