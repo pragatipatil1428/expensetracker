@@ -456,6 +456,14 @@ a:hover {
   margin: 0 auto;
 }
 
+/* Page-level loaders render inside the content area; fit them to the
+   visible viewport (32px top padding + 64px bottom padding) so the
+   spinner centers on screen without overflowing. */
+.app-content > .page-loader {
+  min-height: calc(100vh - 96px);
+  min-height: calc(100dvh - 96px);
+}
+
 /* ── Page header ──────────────────────────────────────────────────────── */
 
 .page {
@@ -1223,7 +1231,8 @@ a:hover {
 }
 
 .page-loader {
-  min-height: 60vh;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1627,6 +1636,11 @@ a:hover {
 @media (max-width: 860px) {
   .app-content {
     padding: 24px 20px 56px;
+  }
+
+  .app-content > .page-loader {
+    min-height: calc(100vh - 80px);
+    min-height: calc(100dvh - 80px);
   }
 
   .dashboard-lower {

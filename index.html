@@ -25,9 +25,55 @@
         document.documentElement.style.colorScheme = theme;
       })();
     </script>
+    <style>
+      /* Shown immediately on page load until the React app mounts. */
+      .boot-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        background: #f4f5fb;
+      }
+      html[data-theme='dark'] .boot-loader {
+        background: #0d1020;
+      }
+      .boot-loader__spinner {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px solid currentColor;
+        border-top-color: transparent;
+        animation: boot-spin 0.7s linear infinite;
+        color: #ea580c;
+      }
+      html[data-theme='dark'] .boot-loader__spinner {
+        color: #f97316;
+      }
+      .boot-loader__label {
+        color: #6b7280;
+        font-size: 14px;
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      @keyframes boot-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="boot-loader">
+        <span class="boot-loader__spinner" aria-hidden="true"></span>
+        <p class="boot-loader__label">Loading…</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
